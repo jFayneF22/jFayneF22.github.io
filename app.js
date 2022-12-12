@@ -66,10 +66,10 @@ function update() {
 		if
 	})*/
 	//makes clouds wrap around screen
-	this.physics.world.wrap(Cloud1, 48);
-	this.physics.world.wrap(Cloud2, 48);
-	this.physics.world.wrap(Cloud3, 48);
-	this.physics.world.wrap(Cloud4, 48);
+	this.physics.world.wrap(Cloud1, 50);
+	this.physics.world.wrap(Cloud2, 50);
+	this.physics.world.wrap(Cloud3, 50);
+	this.physics.world.wrap(Cloud4, 50);
 }
 const config = {
 	//whats game physics the game is using
