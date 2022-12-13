@@ -8,6 +8,12 @@ function preload() {
 	this.load.image('clouds', 'assets/images/cloud.png');
 	//loads image of the projectiles that will be shot from the player
 	this.load.image('blast', 'assets/images/plasmaBlast.png');
+	//temporary enemies
+	this.load.image('sheild', 'assets/images/AvengerSheild.png');
+	function numEnemies() {
+		const totalEnemies = gameState.enemies.getChildren().length;
+		return totalEnemies;
+	}
 }
 //what shows up at start 
 function create() {
@@ -29,30 +35,40 @@ function create() {
 	//adds projectiles to a group
 	gameState.Blast = this.physics.add.group();
 	//creates 4 clouds in random places and m
-	Cloud1 = this.physics.add.image(Math.floor(Math.random()* 1351),Math.floor(Math.random()* 501), 'clouds').setScale(3);
-	Cloud2 = this.physics.add.image(Math.floor(Math.random()* 1351),Math.floor(Math.random()* 501), 'clouds').setScale(3);
-	Cloud3 = this.physics.add.image(Math.floor(Math.random()* 1351),Math.floor(Math.random()* 501), 'clouds').setScale(3);
-	Cloud4 = this.physics.add.image(Math.floor(Math.random()* 1351),Math.floor(Math.random()* 501), 'clouds').setScale(3);
+	Cloud1 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
+	Cloud2 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
+	Cloud3 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
+	Cloud4 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
 	//makes clouds move backward
-	Cloud1.setVelocity(-150, 0 );
-	Cloud2.setVelocity(-150, 0 );
-	Cloud3.setVelocity(-150, 0 );
-	Cloud4.setVelocity(-150, 0 );
+	Cloud1.setVelocity(-150, 0);
+	Cloud2.setVelocity(-150, 0);
+	Cloud3.setVelocity(-150, 0);
+	Cloud4.setVelocity(-150, 0);
+	//enemy class
+	gameState.enemy = this.physics.add.group();
+	//spawns  in enemies
+	for (let x = 0; x < 5; x++) {
+		gameState.enemy.create(1300, -100 * x + 450, 'sheild').setScale(1);
+	}
+	this.physics.add.collider(gameState.enemy, gameState.Blast, (sheild, blast) => {
+		sheild.destroy();
+		blast.destroy();
+	});
 }
 function update() {
 	//controls to make player move up
 	if (gameState.cursors.up.isDown) {
 		gameState.player.setVelocityY(-200);
-	//controls to make player move down
+		//controls to make player move down
 	} else if (gameState.cursors.down.isDown) {
 		gameState.player.setVelocityY(200);
-	//controls player to move left
+		//controls player to move left
 	} else if (gameState.cursors.left.isDown) {
 		gameState.player.setVelocityX(-300);
-	//controls to move player right
+		//controls to move player right
 	} else if (gameState.cursors.right.isDown) {
 		gameState.player.setVelocityX(200);
-	//if no buttons pressed than player moves backwards to world bounds
+		//if no buttons pressed than player moves backwards to world bounds
 	} else {
 		gameState.player.setVelocityX(-200);
 		gameState.player.setVelocityY(0);
@@ -70,6 +86,14 @@ function update() {
 	this.physics.world.wrap(Cloud2, 50);
 	this.physics.world.wrap(Cloud3, 50);
 	this.physics.world.wrap(Cloud4, 50);
+	//enemy respawn
+	if (gameState.enemy.getChildren().length === 0) {
+		for (let x = 0; x < 5; x++) {
+			gameState.enemy.create(1300, -100 * x + 450, 'sheild').setScale(1);
+		}
+	} else {
+			gameState.active = false;
+	}
 }
 const config = {
 	//whats game physics the game is using
