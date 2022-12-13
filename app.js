@@ -20,7 +20,7 @@ function create() {
 	//game over restart
 	gameState.active = true;
 	this.input.on('pointerup', () => {
-		if (gameState.active === false) {
+		if (gameState.active = false) {
 			this.scene.restart();
 		}
 	});
@@ -50,10 +50,24 @@ function create() {
 	for (let x = 0; x < 5; x++) {
 		gameState.enemy.create(1300, -100 * x + 450, 'sheild').setScale(1);
 	}
+	//destroy enemy and blast when colliding
 	this.physics.add.collider(gameState.enemy, gameState.Blast, (sheild, blast) => {
 		sheild.destroy();
 		blast.destroy();
 	});
+	//ends game when enemy and player collide
+	this.physics.add.collider(gameState.enemy, gameState.player, () => {
+		gameState.active = false;
+		this.physics.pause();
+		this.add.text(650, 250, 'GAME OVER \n Click to restart', { fontSize: '15px', fill: '#000' });
+	});
+	//game restarts when clicked
+	this.input.on('pointerup', () => {
+		if(gameState.active === false) {
+			this.scene.restart();
+		}
+	})
+	gameState.wave = 1
 }
 function update() {
 	//controls to make player move up
@@ -88,11 +102,23 @@ function update() {
 	this.physics.world.wrap(Cloud4, 50);
 	//enemy respawn
 	if (gameState.enemy.getChildren().length === 0) {
-		for (let x = 0; x < 5; x++) {
-			gameState.enemy.create(1300, -100 * x + 450, 'sheild').setScale(1);
-		}
-	} else {
+		gameState.wave = gameState.wave + 1
+		if (gameState.wave === 2) {
+			for (let x = 0; x < 5; x++) {
+				gameState.enemy.create(1300, -75 * x + 337.5, 'sheild').setScale(.75);
+			}
+		} else if (gameState.wave === 3) {
+			for (let x = 0; x < 10; x++) {
+				gameState.enemy.create(1300, -100 * x + 225, 'sheild').setScale(.5);
+			}
+		} else if (gameState.wave === 4) {
+			for (let x = 0; x < 5; x++) {
+				gameState.enemy.create(1300, -100 * x + 450, 'sheild').setScale(.25);
+			}
+		} else if (gameState.wave === 5) {
 			gameState.active = false;
+			console.log(wave)
+		}
 	}
 }
 const config = {
