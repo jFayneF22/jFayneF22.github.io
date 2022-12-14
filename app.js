@@ -11,6 +11,8 @@ function preload() {
 	this.load.image('blast', 'assets/images/plasmaBlast.png');
 	//temporary enemies
 	this.load.image('sheild', 'assets/images/AvengerSheild.png');
+	//loads image of projectiles shot from enemies
+	this.load.image('fire', 'assets/images/fire.png');
 	//gets number of enemies
 	function numEnemies() {
 		const totalEnemies = gameState.enemies.getChildren().length;
@@ -29,7 +31,7 @@ function create() {
 	//adds clouds to a group
 	gameState.cloud = this.physics.add.group();
 	//player loads in
-	gameState.player = this.physics.add.sprite(675, 250, 'avenger').setScale(.1);
+	gameState.player = this.physics.add.sprite(675, 250, 'avenger').setScale(.25);
 	//player cant move past world bounds
 	gameState.player.setCollideWorldBounds(true);
 	//will help with controls later
@@ -84,11 +86,11 @@ function create() {
 	const genBlast = () => {
 		let randomenemy = Phaser.Utils.Array.GetRandom(gameState.enemy.getChildren());
 
-		enemyfire.create(randomenemy.x, randomenemy.y, 'blast');
+		enemyfire.create(randomenemy.x, randomenemy.y, 'fire');
 		enemyfire.setVelocityX(-200);
 	};
 	gameState.blastLoop = this.time.addEvent({
-		delay: 300,
+		delay: 500,
 		callback: genBlast,
 		callbackScope: this,
 		loop: true
