@@ -71,19 +71,25 @@ function create() {
 	})
 	//number of waves we start with
 	gameState.wave = 1
+	//sets up WASD keys
+	gameState.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+	gameState.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+	gameState.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+	gameState.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+	gameState.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.enter);
 }
 function update() {
 	//controls to make player move up
-	if (gameState.cursors.up.isDown) {
+	if (gameState.cursors.up.isDown || gameState.keyW.isDown) {
 		gameState.player.setVelocityY(-200);
 		//controls to make player move down
-	} else if (gameState.cursors.down.isDown) {
+	} else if (gameState.cursors.down.isDown || gameState.keyS.isDown) {
 		gameState.player.setVelocityY(200);
 		//controls player to move left
-	} else if (gameState.cursors.left.isDown) {
+	} else if (gameState.cursors.left.isDown || gameState.keyA.isDown) {
 		gameState.player.setVelocityX(-300);
 		//controls to move player right
-	} else if (gameState.cursors.right.isDown) {
+	} else if (gameState.cursors.right.isDown || gameState.keyD.isDown) {
 		gameState.player.setVelocityX(200);
 		//if no buttons pressed than player moves backwards to world bounds
 	} else {
