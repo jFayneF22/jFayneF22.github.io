@@ -1,3 +1,4 @@
+//creates gameState Variable
 const gameState = {};
 
 //what load in the game at start
@@ -10,6 +11,7 @@ function preload() {
 	this.load.image('blast', 'assets/images/plasmaBlast.png');
 	//temporary enemies
 	this.load.image('sheild', 'assets/images/AvengerSheild.png');
+	//gets number of enemies
 	function numEnemies() {
 		const totalEnemies = gameState.enemies.getChildren().length;
 		return totalEnemies;
@@ -63,10 +65,11 @@ function create() {
 	});
 	//game restarts when clicked
 	this.input.on('pointerup', () => {
-		if(gameState.active === false) {
+		if (gameState.active === false) {
 			this.scene.restart();
 		}
 	})
+	//number of waves we start with
 	gameState.wave = 1
 }
 function update() {
@@ -84,6 +87,7 @@ function update() {
 		gameState.player.setVelocityX(200);
 		//if no buttons pressed than player moves backwards to world bounds
 	} else {
+		//player moves backwards to world bounds if no input
 		gameState.player.setVelocityX(-200);
 		gameState.player.setVelocityY(0);
 	}
@@ -92,9 +96,6 @@ function update() {
 		gameState.Blast.create(gameState.player.x + 75, gameState.player.y, 'blast').setScale(1).setVelocityX(230);
 		console.log("i pressed space");
 	}
-	/*gameState.Blast.getChildren().forEach(blast =>{
-		if
-	})*/
 	//makes clouds wrap around screen
 	this.physics.world.wrap(Cloud1, 50);
 	this.physics.world.wrap(Cloud2, 50);
@@ -102,22 +103,27 @@ function update() {
 	this.physics.world.wrap(Cloud4, 50);
 	//enemy respawn
 	if (gameState.enemy.getChildren().length === 0) {
+		//enemies get smaller by 75% and adds extra enemy
 		gameState.wave = gameState.wave + 1
 		if (gameState.wave === 2) {
-			for (let x = 0; x < 5; x++) {
-				gameState.enemy.create(1300, -75 * x + 337.5, 'sheild').setScale(.75);
+			for (let x = 0; x < 6; x++) {
+				gameState.enemy.create(975, -75 * x + 450, 'sheild').setScale(.75);
 			}
+			//enemys get smaller by 50% from the first wave and adds 2 more enemies
 		} else if (gameState.wave === 3) {
-			for (let x = 0; x < 10; x++) {
-				gameState.enemy.create(1300, -100 * x + 225, 'sheild').setScale(.5);
+			for (let x = 0; x < 7; x++) {
+				gameState.enemy.create(650, -70 * x + 450, 'sheild').setScale(.5);
 			}
+			//enemys get smaller by 25% from the first wave
 		} else if (gameState.wave === 4) {
-			for (let x = 0; x < 5; x++) {
-				gameState.enemy.create(1300, -100 * x + 450, 'sheild').setScale(.25);
+			for (let x = 0; x < 8; x++) {
+				gameState.enemy.create(325, -50 * x + 450, 'sheild').setScale(.25);
 			}
+			//after 4th wave the game ends
 		} else if (gameState.wave === 5) {
 			gameState.active = false;
-			console.log(wave)
+			this.physics.pause();
+			this.add.text(650, 250, 'YOU WON \n Click to restart', { fontSize: '15px', fill: '#000' });
 		}
 	}
 }
