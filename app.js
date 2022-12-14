@@ -67,6 +67,7 @@ function create() {
 	this.input.on('pointerup', () => {
 		if (gameState.active === false) {
 			this.scene.restart();
+
 		}
 	})
 	//number of waves we start with
@@ -77,6 +78,26 @@ function create() {
 	gameState.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 	gameState.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 	gameState.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.enter);
+	//enemy shoot back
+	const enemyfire = this.physics.add.group();
+	//makes enemies shoot back at you
+	const genBlast = () => {
+		let randomenemy = Phaser.Utils.Array.GetRandom(gameState.enemy.getChildren());
+
+		enemyfire.create(randomenemy.x, randomenemy.y, 'blast');
+		enemyfire.setVelocityX(-200);
+	};
+	gameState.blastLoop = this.time.addEvent({
+		delay: 300,
+		callback: genBlast,
+		callbackScope: this,
+		loop: true
+	});
+	this.physics.add.collider(enemyfire, gameState.player, () => {
+		gameState.active = false;
+		this.physics.pause();
+		this.add.text(650, 250, 'GAME OVER \n Click to restart', { fontSize: '15px', fill: '#000' });	
+	});
 }
 function update() {
 	//controls to make player move up
