@@ -58,6 +58,7 @@ function create() {
 	this.physics.add.collider(gameState.enemy, gameState.Blast, (sheild, blast) => {
 		sheild.destroy();
 		blast.destroy();
+		gameState.scoreText.setText(`Enemies: ${numEnemies()}`);
 	});
 	//ends game when enemy and player collide
 	this.physics.add.collider(gameState.enemy, gameState.player, () => {
@@ -87,10 +88,10 @@ function create() {
 		let randomenemy = Phaser.Utils.Array.GetRandom(gameState.enemy.getChildren());
 
 		enemyfire.create(randomenemy.x, randomenemy.y, 'fire');
-		enemyfire.setVelocityX(-200);
+		enemyfire.setVelocityX(-300);
 	};
 	gameState.blastLoop = this.time.addEvent({
-		delay: 500,
+		delay: 300,
 		callback: genBlast,
 		callbackScope: this,
 		loop: true
@@ -98,8 +99,13 @@ function create() {
 	this.physics.add.collider(enemyfire, gameState.player, () => {
 		gameState.active = false;
 		this.physics.pause();
-		this.add.text(650, 250, 'GAME OVER \n Click to restart', { fontSize: '15px', fill: '#000' });	
+		this.add.text(650, 250, 'GAME OVER \n Click to restart', { fontSize: '15px', fill: '#000' });
 	});
+	//sets up game cheat code
+	gameState.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+	gameState.keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+	gameState.keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+
 }
 function update() {
 	//controls to make player move up
@@ -130,6 +136,10 @@ function update() {
 	this.physics.world.wrap(Cloud2, 50);
 	this.physics.world.wrap(Cloud3, 50);
 	this.physics.world.wrap(Cloud4, 50);
+	if (gameState.keyB.isDown && gameState.keyL.isDown && gamestate.keyA.isDown && gameState.keyS.isDown && gamestate.keyT.isDown) {
+		wave = wave + 1;
+		console.log("wave is now " + wave);
+	}
 	//enemy respawn
 	if (gameState.enemy.getChildren().length === 0) {
 		//enemies get smaller by 75% and adds extra enemy
@@ -141,12 +151,12 @@ function update() {
 			//enemys get smaller by 50% from the first wave and adds 2 more enemies
 		} else if (gameState.wave === 3) {
 			for (let x = 0; x < 7; x++) {
-				gameState.enemy.create(650, -70 * x + 450, 'sheild').setScale(.5);
+				gameState.enemy.create(650, -70 * x + 450, 'sheild').setScale(.65);
 			}
 			//enemys get smaller by 25% from the first wave
 		} else if (gameState.wave === 4) {
 			for (let x = 0; x < 8; x++) {
-				gameState.enemy.create(325, -50 * x + 450, 'sheild').setScale(.25);
+				gameState.enemy.create(325, -50 * x + 450, 'sheild').setScale(.5);
 			}
 			//after 4th wave the game ends
 		} else if (gameState.wave === 5) {
