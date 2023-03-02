@@ -1,4 +1,4 @@
-//creates gameState Variable
+ //creates gameState Variable
 const gameState = {};
 
 //what load in the game at start
