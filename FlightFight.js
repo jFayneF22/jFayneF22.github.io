@@ -14,10 +14,6 @@ function preload() {
 	//loads image of projectiles shot from enemies
 	this.load.image('fire', 'assets/images/fire.png');
 	//gets number of enemies
-	function numEnemies() {
-		const totalEnemies = gameState.enemies.getChildren().length;
-		return totalEnemies;
-	}
 }
 //what shows up at start 
 function create() {
@@ -58,7 +54,6 @@ function create() {
 	this.physics.add.collider(gameState.enemy, gameState.Blast, (sheild, blast) => {
 		sheild.destroy();
 		blast.destroy();
-		gameState.scoreText.setText(`Enemies: ${numEnemies()}`);
 	});
 	//ends game when enemy and player collide
 	this.physics.add.collider(gameState.enemy, gameState.player, () => {
@@ -74,13 +69,12 @@ function create() {
 		}
 	})
 	//number of waves we start with
-	gameState.wave = 1
+	gameState.wave = 5
 	//sets up WASD keys
 	gameState.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 	gameState.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 	gameState.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 	gameState.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-	gameState.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.enter);
 	//enemy shoot back
 	const enemyfire = this.physics.add.group();
 	//makes enemies shoot back at you
@@ -101,11 +95,6 @@ function create() {
 		this.physics.pause();
 		this.add.text(650, 250, 'GAME OVER \n Click to restart', { fontSize: '15px', fill: '#000' });
 	});
-	//sets up game cheat code
-	gameState.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
-	gameState.keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
-	gameState.keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
-
 }
 function update() {
 	//controls to make player move up
@@ -129,17 +118,12 @@ function update() {
 	//input to use space bar to send out projectiles
 	if (Phaser.Input.Keyboard.JustDown(gameState.cursors.space)) {
 		gameState.Blast.create(gameState.player.x + 75, gameState.player.y, 'blast').setScale(1).setVelocityX(230);
-		console.log("i pressed space");
 	}
 	//makes clouds wrap around screen
 	this.physics.world.wrap(Cloud1, 50);
 	this.physics.world.wrap(Cloud2, 50);
 	this.physics.world.wrap(Cloud3, 50);
 	this.physics.world.wrap(Cloud4, 50);
-	if (gameState.keyB.isDown && gameState.keyL.isDown && gamestate.keyA.isDown && gameState.keyS.isDown && gamestate.keyT.isDown) {
-		wave = wave + 1;
-		console.log("wave is now " + wave);
-	}
 	//enemy respawn
 	if (gameState.enemy.getChildren().length === 0) {
 		//enemies get smaller by 75% and adds extra enemy
