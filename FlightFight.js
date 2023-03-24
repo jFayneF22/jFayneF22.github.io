@@ -69,7 +69,7 @@ function create() {
 		}
 	})
 	//number of waves we start with
-	gameState.wave = 5
+	gameState.wave = 1
 	//sets up WASD keys
 	gameState.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 	gameState.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
