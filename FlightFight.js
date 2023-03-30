@@ -40,10 +40,10 @@ function create() {
 	Cloud3 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
 	Cloud4 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
 	//makes clouds move backward
-	Cloud1.setVelocity(-150, 0);
-	Cloud2.setVelocity(-150, 0);
-	Cloud3.setVelocity(-150, 0);
-	Cloud4.setVelocity(-150, 0);
+	Cloud1.setVelocity(-300, 0);
+	Cloud2.setVelocity(-300, 0);
+	Cloud3.setVelocity(-300, 0);
+	Cloud4.setVelocity(-300, 0);
 	//enemy class
 	gameState.enemy = this.physics.add.group();
 	//spawns  in enemies
@@ -82,10 +82,10 @@ function create() {
 		let randomenemy = Phaser.Utils.Array.GetRandom(gameState.enemy.getChildren());
 
 		enemyfire.create(randomenemy.x, randomenemy.y, 'fire');
-		enemyfire.setVelocityX(-300);
+		enemyfire.setVelocityX(-400);
 	};
 	gameState.blastLoop = this.time.addEvent({
-		delay: 300,
+		delay: 200,
 		callback: genBlast,
 		callbackScope: this,
 		loop: true
@@ -99,25 +99,25 @@ function create() {
 function update() {
 	//controls to make player move up
 	if (gameState.cursors.up.isDown || gameState.keyW.isDown) {
-		gameState.player.setVelocityY(-200);
+		gameState.player.setVelocityY(-400);
 		//controls to make player move down
 	} else if (gameState.cursors.down.isDown || gameState.keyS.isDown) {
-		gameState.player.setVelocityY(200);
+		gameState.player.setVelocityY(400);
 		//controls player to move left
 	} else if (gameState.cursors.left.isDown || gameState.keyA.isDown) {
-		gameState.player.setVelocityX(-300);
+		gameState.player.setVelocityX(-400);
 		//controls to move player right
 	} else if (gameState.cursors.right.isDown || gameState.keyD.isDown) {
-		gameState.player.setVelocityX(200);
+		gameState.player.setVelocityX(400);
 		//if no buttons pressed than player moves backwards to world bounds
 	} else {
 		//player moves backwards to world bounds if no input
-		gameState.player.setVelocityX(-200);
+		gameState.player.setVelocityX(-400);
 		gameState.player.setVelocityY(0);
 	}
 	//input to use space bar to send out projectiles
 	if (Phaser.Input.Keyboard.JustDown(gameState.cursors.space)) {
-		gameState.Blast.create(gameState.player.x + 75, gameState.player.y, 'blast').setScale(1).setVelocityX(230);
+		gameState.Blast.create(gameState.player.x + 75, gameState.player.y, 'blast').setScale(1).setVelocityX(400);
 	}
 	//makes clouds wrap around screen
 	this.physics.world.wrap(Cloud1, 50);
