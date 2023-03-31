@@ -23,11 +23,85 @@ function create() {
 		if (gameState.active = false) {
 			this.scene.restart();
 		}
+		if (document.getElementById("LvlEasy").addEventListener("CLick")) {
+			//adds clouds to a group
+	gameState.cloud = this.physics.add.group();
+	//player loads in
+	gameState.player = this.physics.add.sprite(675, 250, 'avenger').setScale(.);
+	//player cant move past world bounds
+	gameState.player.setCollideWorldBounds(true);
+	//will help with controls later
+	gameState.cursors = this.input.keyboard.createCursorKeys();
+	//adds projectiles to a group
+	gameState.Blast = this.physics.add.group();
+	//creates 4 clouds in random places and m
+	Cloud1 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
+	Cloud2 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
+	Cloud3 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
+	Cloud4 = this.physics.add.image(Math.floor(Math.random() * 1351), Math.floor(Math.random() * 501), 'clouds').setScale(3);
+	//makes clouds move backward
+	Cloud1.setVelocity(-300, 0);
+	Cloud2.setVelocity(-300, 0);
+	Cloud3.setVelocity(-300, 0);
+	Cloud4.setVelocity(-300, 0);
+	//enemy class
+	gameState.enemy = this.physics.add.group();
+	//spawns  in enemies
+	for (let x = 0; x < 5; x++) {
+		gameState.enemy.create(1300, -100 * x + 450, 'sheild').setScale(1);
+	}
+	//destroy enemy and blast when colliding
+	this.physics.add.collider(gameState.enemy, gameState.Blast, (sheild, blast) => {
+		sheild.destroy();
+		blast.destroy();
+	});
+	//ends game when enemy and player collide
+	this.physics.add.collider(gameState.enemy, gameState.player, () => {
+		gameState.active = false;
+		this.physics.pause();
+		this.add.text(650, 250, 'GAME OVER \n Click to restart', { fontSize: '15px', fill: '#000' });
+	});
+	//game restarts when clicked
+	this.input.on('pointerup', () => {
+		if (gameState.active === false) {
+			this.scene.restart();
+
+		}
+	})
+	//number of waves we start with
+	gameState.wave = 1
+	//sets up WASD keys
+	gameState.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+	gameState.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+	gameState.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+	gameState.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+	//enemy shoot back
+	const enemyfire = this.physics.add.group();
+	//makes enemies shoot back at you
+	const genBlast = () => {
+		let randomenemy = Phaser.Utils.Array.GetRandom(gameState.enemy.getChildren());
+
+		enemyfire.create(randomenemy.x, randomenemy.y, 'fire');
+		enemyfire.setVelocityX(-400);
+	};
+	gameState.blastLoop = this.time.addEvent({
+		delay: 200,
+		callback: genBlast,
+		callbackScope: this,
+		loop: true
+	});
+	this.physics.add.collider(enemyfire, gameState.player, () => {
+		gameState.active = false;
+		this.physics.pause();
+		this.add.text(650, 250, 'GAME OVER \n Click to restart', { fontSize: '15px', fill: '#000' });
+	});
+}
+		};
 	});
 	//adds clouds to a group
 	gameState.cloud = this.physics.add.group();
 	//player loads in
-	gameState.player = this.physics.add.sprite(675, 250, 'avenger').setScale(.25);
+	gameState.player = this.physics.add.sprite(675, 250, 'avenger').setScale(.);
 	//player cant move past world bounds
 	gameState.player.setCollideWorldBounds(true);
 	//will help with controls later
