@@ -81,7 +81,7 @@ function create() {
 	const genBlast = () => {
 		let randomenemy = Phaser.Utils.Array.GetRandom(gameState.enemy.getChildren());
 
-		enemyfire.create(randomenemy.x, randomenemy.y, 'fire');
+		enemyfire.create(randomenemy.x, randomenemy.y, 'fire').setScale(.2);
 		enemyfire.setVelocityX(-400);
 	};
 	gameState.blastLoop = this.time.addEvent({
